@@ -1,57 +1,90 @@
-import React from 'react';
-import FontAwesome from '@expo/vector-icons/FontAwesome';
-import { Link, Tabs } from 'expo-router';
-import { Pressable } from 'react-native';
+import React from "react";
+import FontAwesome from "@expo/vector-icons/FontAwesome";
+import { Tabs, useRouter } from "expo-router";
+import { ColorValue, Pressable } from "react-native";
 
-import Colors from '@/constants/Colors';
-import { useColorScheme } from '@/components/useColorScheme';
-import { useClientOnlyValue } from '@/components/useClientOnlyValue';
+import { colors } from "@/src/theme";
 
-// You can explore the built-in icon families and icons on the web at https://icons.expo.fyi/
-function TabBarIcon(props: {
-  name: React.ComponentProps<typeof FontAwesome>['name'];
-  color: string;
+// Ícones disponíveis em https://icons.expo.fyi/ (família FontAwesome)
+function TabBarIcon({
+  name,
+  color,
+}: {
+  name: React.ComponentProps<typeof FontAwesome>["name"];
+  color: ColorValue;
 }) {
-  return <FontAwesome size={28} style={{ marginBottom: -3 }} {...props} />;
+  return (
+    <FontAwesome
+      name={name}
+      size={24}
+      style={{ marginBottom: -3 }}
+      color={color as string}
+    />
+  );
+}
+
+// Atalho para a tela de backup e relatórios, no cabeçalho da aba Caixa
+function BackupButton() {
+  const router = useRouter();
+  return (
+    <Pressable
+      onPress={() => router.push("/backup")}
+      hitSlop={10}
+      accessibilityLabel="Backup e relatórios"
+      style={{ marginRight: 16 }}
+    >
+      <FontAwesome name="cloud-upload" size={22} color={colors.primary} />
+    </Pressable>
+  );
 }
 
 export default function TabLayout() {
-  const colorScheme = useColorScheme();
-
   return (
     <Tabs
       screenOptions={{
-        tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tint,
-        // Disable the static render of the header on web
-        // to prevent a hydration error in React Navigation v6.
-        headerShown: useClientOnlyValue(false, true),
-      }}>
+        tabBarActiveTintColor: colors.primary,
+        tabBarInactiveTintColor: colors.textMuted,
+        tabBarStyle: {
+          backgroundColor: colors.surface,
+          borderTopColor: colors.border,
+        },
+        tabBarLabelStyle: { fontWeight: "600" },
+        headerStyle: { backgroundColor: colors.background },
+        headerTitleStyle: { color: colors.text, fontWeight: "700" },
+        headerShadowVisible: false,
+      }}
+    >
       <Tabs.Screen
         name="index"
         options={{
-          title: 'Tab One',
-          tabBarIcon: ({ color }) => <TabBarIcon name="code" color={color} />,
-          headerRight: () => (
-            <Link href="/modal" asChild>
-              <Pressable>
-                {({ pressed }) => (
-                  <FontAwesome
-                    name="info-circle"
-                    size={25}
-                    color={Colors[colorScheme ?? 'light'].text}
-                    style={{ marginRight: 15, opacity: pressed ? 0.5 : 1 }}
-                  />
-                )}
-              </Pressable>
-            </Link>
+          title: "Caixa",
+          headerRight: () => <BackupButton />,
+          tabBarIcon: ({ color }) => <TabBarIcon name="money" color={color} />,
+        }}
+      />
+      <Tabs.Screen
+        name="ingredients"
+        options={{
+          title: "Insumos",
+          tabBarIcon: ({ color }) => (
+            <TabBarIcon name="shopping-basket" color={color} />
           ),
         }}
       />
       <Tabs.Screen
-        name="two"
+        name="stock"
         options={{
-          title: 'Tab Two',
-          tabBarIcon: ({ color }) => <TabBarIcon name="code" color={color} />,
+          title: "Estoque",
+          tabBarIcon: ({ color }) => <TabBarIcon name="cubes" color={color} />,
+        }}
+      />
+      <Tabs.Screen
+        name="orders"
+        options={{
+          title: "Pedidos",
+          tabBarIcon: ({ color }) => (
+            <TabBarIcon name="shopping-cart" color={color} />
+          ),
         }}
       />
     </Tabs>
