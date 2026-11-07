@@ -27,6 +27,11 @@ export interface CreateIngredientInput {
   register_expense: boolean;
 }
 
+export type UpdateIngredientInput = Omit<
+  CreateIngredientInput,
+  "register_expense"
+>;
+
 export interface Product {
   id: string;
   name: string;

@@ -365,7 +365,7 @@ export default function StockScreen() {
             // 2. Cenário Manual: Escolha por lote + checkbox para fixar preferência
             <RNView style={{ marginBottom: 12 }}>
               <RNView style={styles.checkboxRow}>
-                <Checkbox
+                <Checkbox.Android
                   status={deductCost ? "checked" : "unchecked"}
                   onPress={() => setDeductCost(!deductCost)}
                   color={colors.primary}
@@ -383,7 +383,7 @@ export default function StockScreen() {
                 <RNView
                   style={[styles.checkboxRow, { marginLeft: 28, marginTop: 4 }]}
                 >
-                  <Checkbox
+                  <Checkbox.Android
                     status={rememberPreference ? "checked" : "unchecked"}
                     onPress={() => setRememberPreference(!rememberPreference)}
                     color={colors.primary}
